@@ -12,5 +12,5 @@ Run it: `dotnet run`
 
 The api should be available at `https://localhost:5001/`.
 
-My notes are [here])https://github.com/jsheridanwells/dev-scrapbook/tree/master/asp-net-core/ion-rest-api_.
+My notes are [here](https://github.com/jsheridanwells/dev-scrapbook/tree/master/asp-net-core/ion-rest-api_).
 
