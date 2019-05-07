@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LandonApi.Filters;
+using LandonApi.Models;
+using LandonApi.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,6 +31,12 @@ namespace LandonApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<HotelInfo>(
+                Configuration.GetSection("Info")
+            );
+            services.AddDbContext<ApiContext>(
+                opts => opts.UseInMemoryDatabase("LandonDb")
+            );
             services.AddMvc(opts =>
             {
                 opts.Filters.Add<JsonExceptionFilter>();
