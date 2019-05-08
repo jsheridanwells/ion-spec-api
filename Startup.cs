@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 using LandonApi.Filters;
 using LandonApi.Models;
 using LandonApi.Repository;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSwag.AspNetCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace LandonApi
 {
@@ -31,11 +33,24 @@ namespace LandonApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var dbConfig = Configuration.GetSection("Db")
+                .Get<DbConfig>();
+
+            services.AddDbContextPool<ApiContext>(
+                opts => opts.UseMySql(
+                    $"Server={dbConfig.Server};"
+                    + $"Database={dbConfig.Database};"
+                    + $"User={dbConfig.User};"
+                    + $"Password={dbConfig.Password};"
+                ,
+                mySqlOptions => 
+                {
+                    mySqlOptions.ServerVersion(new Version(8, 0, 15), ServerType.MySql);
+                }
+            ));
+
             services.Configure<HotelInfo>(
                 Configuration.GetSection("Info")
-            );
-            services.AddDbContext<ApiContext>(
-                opts => opts.UseInMemoryDatabase("LandonDb")
             );
             services.AddMvc(opts =>
             {
